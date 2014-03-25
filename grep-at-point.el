@@ -17,10 +17,10 @@
       )
      )
    )
-  (cd directory)
   (grep
    (format
-    "grep -nH -r '%s' . --include=\"%s\""
+    "cd %s && grep -nH -r '%s' . --include=\"%s\""
+    directory
     word
     extname
     )
