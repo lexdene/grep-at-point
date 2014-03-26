@@ -11,7 +11,7 @@
    (let (
          (origin-word (thing-at-point 'symbol)))
      (list
-      (read-from-minibuffer "grep directory: " (getenv "PWD"))
+      (read-file-name "grep directory: " (getenv "PWD"))
       (read-from-minibuffer "grep word: " origin-word)
       (read-from-minibuffer "file ext: " "*")
       )
