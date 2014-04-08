@@ -2,18 +2,21 @@
 ; 其原理只是将grep和thingatpt简单地结合一下
 
 (provide 'grep-at-point)
-(provide 'nopromp-grep-at-point)
 
 (require 'thingatpt)
+
 (defun grep-at-point (directory word extname)
   "grep the current word"
   (interactive
    (let (
          (origin-word (thing-at-point 'symbol)))
      (list
-      (read-file-name "grep directory: " (getenv "PWD"))
+      (read-file-name "grep directory: " default-directory default-directory)
       (read-from-minibuffer "grep word: " origin-word)
-      (read-from-minibuffer "file ext: " "*")
+      (read-from-minibuffer
+       "file ext: "
+       (concat "*." (file-name-extension (buffer-name)))
+       )
       )
      )
    )
