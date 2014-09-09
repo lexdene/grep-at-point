@@ -15,7 +15,7 @@
       (read-from-minibuffer "grep word: " origin-word)
       (read-from-minibuffer
        "file ext: "
-       (concat "*." (file-name-extension (buffer-name)))
+       (default-file-pattern)
        )
       )
      )
@@ -35,6 +35,10 @@
   (grep-at-point
    (getenv "PWD")
    (thing-at-point 'symbol)
-   (concat "*." (file-name-extension (buffer-name)))
+   (default-file-pattern)
    )
   )
+
+(defun default-file-pattern ()
+  "*.ext"
+  (concat "*." (file-name-extension (buffer-file-name))))
