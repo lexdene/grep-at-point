@@ -9,14 +9,15 @@
   "grep the current word"
   (interactive
    (let (
-         (origin-word (thing-at-point 'symbol)))
+         (origin-word (thing-at-point 'symbol))
+         (word-hist ())
+         (ext-hist ())
+         )
      (list
       (read-file-name "grep directory: " default-directory default-directory)
-      (read-from-minibuffer "grep word: " origin-word)
+      (read-from-minibuffer "grep word: " origin-word nil nil 'word-hist)
       (read-from-minibuffer
-       "file ext: "
-       (default-file-pattern)
-       )
+       "file ext: " (default-file-pattern) nil nil 'ext-hist)
       )
      )
    )
