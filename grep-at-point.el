@@ -42,4 +42,6 @@
 
 (defun default-file-pattern ()
   "*.ext"
-  (concat "*." (file-name-extension (buffer-file-name))))
+  (and
+    (buffer-file-name)
+    (concat "*." (file-name-extension (buffer-file-name)))))
