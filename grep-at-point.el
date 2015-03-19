@@ -5,19 +5,22 @@
 
 (require 'thingatpt)
 
+;; emacs lisp 中, 如何优雅地定义全局变量?
+(defvar grep-at-point-word-hist ())
+(defvar grep-at-point-ext-hist ())
+
 (defun grep-at-point (directory word extname)
   "grep the current word"
   (interactive
    (let (
          (origin-word (thing-at-point 'symbol))
-         (word-hist ())
-         (ext-hist ())
          )
      (list
+      ;; It seems that read-file-name function doesnot have a history arg
       (read-file-name "grep directory: " default-directory default-directory)
-      (read-from-minibuffer "grep word: " origin-word nil nil 'word-hist)
+      (read-from-minibuffer "grep word: " origin-word nil nil 'grep-at-point-word-hist)
       (read-from-minibuffer
-       "file ext: " (default-file-pattern) nil nil 'ext-hist)
+       "file ext: " (default-file-pattern) nil nil 'grep-at-point-ext-hist)
       )
      )
    )
