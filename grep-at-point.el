@@ -43,6 +43,18 @@
    )
   )
 
+(defun grep-selected-text (directory word extname)
+  "grep the selected text"
+  (interactive
+    (let
+      ((selected-text (buffer-substring (region-beginning) (region-end))))
+    (list
+      (read-file-name "grep directory: " default-directory default-directory)
+      (read-from-minibuffer "grep word: " selected-text nil nil 'grep-at-point-word-hist)
+      (read-from-minibuffer
+       "file ext: " (default-file-pattern) nil nil 'grep-at-point-ext-hist))))
+  (grep-at-point directory word extname))
+
 (defun default-file-pattern ()
   "*.ext"
   (and
