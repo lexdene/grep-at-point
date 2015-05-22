@@ -26,9 +26,9 @@
    )
   (grep
    (format
-    "cd %s && grep -nH -r '%s' . --include=\"%s\""
+    "cd %s && grep -nH -r \"%s\" . --include=\"%s\""
     directory
-    word
+    (replace-regexp-in-string "\"" "\\\\\"" word)
     extname
     )
    ))
