@@ -5,11 +5,16 @@
 
 (require 'thingatpt)
 
-;; emacs lisp 中, 如何优雅地定义全局变量?
+;; TODO: how to define module level variables in elisp?
 (defvar grep-at-point-word-hist ())
 (defvar grep-at-point-ext-hist ())
+(defvar grep-at-point-exclude-dir-hist ())
 
-(defun grep-at-point (directory word extname)
+(defvar grep-at-point-default-exclude-extname "")
+(defvar grep-at-point-default-grep-command "ggrep")
+(defvar grep-at-point-default-exclude-dir "node_modules,venv,static-build-dist,.git,permdir,test-reports")
+
+(defun grep-at-point (directory word &optional extname exclude-extname grep-command exclude-dir)
   "grep the current word"
   (interactive
    (let (
@@ -21,15 +26,25 @@
       (read-from-minibuffer "grep word: " origin-word nil nil 'grep-at-point-word-hist)
       (read-from-minibuffer
        "file ext: " (default-file-pattern) nil nil 'grep-at-point-ext-hist)
+      (read-from-minibuffer
+       "exclude ext: " grep-at-point-default-exclude-extname)
+      (read-from-minibuffer
+       "grep command: " grep-at-point-default-grep-command)
+      (read-from-minibuffer
+       "exclude-dir: "
+       (or (car grep-at-point-exclude-dir-hist) grep-at-point-default-exclude-dir)
+       nil nil 'grep-at-point-exclude-dir-hist)
       )
      )
    )
   (grep
-   (format
-    "cd %s && grep -nH -r \"%s\" . --include=\"%s\""
-    directory
-    (replace-regexp-in-string "\"" "\\\\\"" word)
-    extname
+   (concat
+    (format "cd %s &&" (replace-regexp-in-string " " "\\\\ " directory))
+    (format " %s" (or grep-command grep-at-point-default-grep-command))
+    (format " -nH -r -i \"%s\" ." (replace-regexp-in-string "\"" "\\\\\"" word))
+    (if (and exclude-extname (not (string= "" exclude-extname))) (format " --exclude=\"%s\"" exclude-extname) "")
+    (if (and extname (not (string= "" extname))) (format " --include=\"%s\"" extname) "")
+    (if (and exclude-dir (not (string= "" exclude-dir))) (format " --exclude-dir={%s}" exclude-dir) "")
     )
    ))
 
