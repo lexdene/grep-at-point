@@ -52,7 +52,7 @@
   "grep the current word without promp"
   (interactive)
   (grep-at-point
-   (getenv "PWD")
+   (or (getenv "PWD") default-directory)
    (thing-at-point 'symbol)
    (default-file-pattern)
    )
@@ -68,7 +68,14 @@
       (read-from-minibuffer "grep word: " selected-text nil nil 'grep-at-point-word-hist)
       (read-from-minibuffer
        "file ext: " (default-file-pattern) nil nil 'grep-at-point-ext-hist))))
-  (grep-at-point directory word extname))
+  (grep-at-point
+   directory
+   word
+   extname
+   grep-at-point-default-exclude-extname
+   grep-at-point-default-grep-command
+   (or (car grep-at-point-exclude-dir-hist) grep-at-point-default-exclude-dir)
+   ))
 
 (defun default-file-pattern ()
   "*.ext"
