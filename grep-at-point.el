@@ -9,6 +9,7 @@
 (defvar grep-at-point-word-hist ())
 (defvar grep-at-point-ext-hist ())
 (defvar grep-at-point-exclude-dir-hist ())
+(defvar grep-at-point-hist nil "History list for grep-at-point.")
 
 (defvar grep-at-point-default-exclude-extname "")
 (defvar grep-at-point-default-grep-command "grep")
@@ -38,7 +39,7 @@
       )
      )
    )
-  (grep
+  (grep-save-and-run
    (concat
     (format "cd %s &&" (replace-regexp-in-string " " "\\\\ " directory))
     (format " %s" (or grep-command grep-at-point-default-grep-command))
@@ -66,6 +67,12 @@
    )
   )
 
+(defun grep-previous-command (command)
+  (interactive
+   (list
+    (read-from-minibuffer "grep command:" (or (car grep-at-point-hist) grep-command))))
+  (grep-save-and-run command))
+
 (defun grep-selected-text (directory word extname)
   "grep the selected text"
   (interactive
@@ -90,3 +97,7 @@
   (and
     (buffer-file-name)
     (concat "*." (file-name-extension (buffer-file-name)))))
+
+(defun grep-save-and-run (command)
+  (add-to-history 'grep-at-point-hist command)
+  (grep command))
