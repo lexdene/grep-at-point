@@ -49,13 +49,20 @@
     )
    ))
 
+(defun find-project-root()
+  "find project root"
+  (message (locate-dominating-file default-directory ".git")))
+
 (defun nopromp-grep-at-point ()
   "grep the current word without promp"
   (interactive)
   (grep-at-point
-   (or (getenv "PWD") default-directory)
+   (or (find-project-root) default-directory)
    (thing-at-point 'symbol)
    (default-file-pattern)
+   grep-at-point-default-exclude-extname
+   grep-at-point-default-grep-command
+   grep-at-point-default-exclude-dir
    )
   )
 
