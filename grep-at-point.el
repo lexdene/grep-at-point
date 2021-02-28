@@ -11,8 +11,9 @@
 (defvar grep-at-point-exclude-dir-hist ())
 
 (defvar grep-at-point-default-exclude-extname "")
-(defvar grep-at-point-default-grep-command "ggrep")
-(defvar grep-at-point-default-exclude-dir "node_modules,venv,static-build-dist,.git,permdir,test-reports")
+(defvar grep-at-point-default-grep-command "grep")
+(defcustom grep-at-point-default-exclude-dir "node_modules,.git"
+    "exclude these dirs when grep")
 
 (defun grep-at-point (directory word &optional extname exclude-extname grep-command exclude-dir)
   "grep the current word"
