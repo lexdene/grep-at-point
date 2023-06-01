@@ -11,10 +11,11 @@
 (defvar grep-at-point-exclude-dir-hist ())
 (defvar grep-at-point-hist nil "History list for grep-at-point.")
 
-(defvar grep-at-point-default-exclude-extname "")
 (defvar grep-at-point-default-grep-command "grep")
 (defcustom grep-at-point-default-exclude-dir "node_modules,.git"
     "exclude these dirs when grep")
+(defcustom grep-at-point-default-exclude-extname ""
+    "exclude files with these ext name when grep")
 
 (defun grep-at-point (directory word &optional extname exclude-extname grep-command exclude-dir)
   "grep the current word"
