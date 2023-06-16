@@ -45,11 +45,25 @@
     (format "cd %s &&" (replace-regexp-in-string " " "\\\\ " directory))
     (format " %s" (or grep-command grep-at-point-default-grep-command))
     (format " -nH -r -i \"%s\" ." (replace-regexp-in-string "\"" "\\\\\"" word))
-    (if (and exclude-extname (not (string= "" exclude-extname))) (format " --exclude=\"%s\"" exclude-extname) "")
-    (if (and extname (not (string= "" extname))) (format " --include=\"%s\"" extname) "")
-    (if (and exclude-dir (not (string= "" exclude-dir))) (format " --exclude-dir={%s}" exclude-dir) "")
+    (if
+     (and
+      (not (string-empty-p exclude-extname))
+      (string-empty-p extname))
+     (format " --exclude=\"%s\"" exclude-extname) "")
+    (if (not (string-empty-p extname))
+        (format " --include=\"%s\"" extname) "")
+    (if (not (string-empty-p exclude-dir))
+        (format " --exclude-dir={%s}" exclude-dir) "")
     )
    ))
+
+(defun string-empty-p (s)
+  "is string nil or empty string"
+  (or
+    (not s)
+    (string= "" s)
+  )
+)
 
 (defun find-project-root()
   "find project root"
